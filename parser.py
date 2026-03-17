@@ -1,6 +1,9 @@
 import sys
 
 
+REQUIRED_KEYS = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE", "PERFECT"]
+
+
 # Validar sys.argv para checar se nao tem args extras e pegar o caminho
 # do arquivo
 def validate_args() -> str:
@@ -29,9 +32,34 @@ def load_config_file(cfg_path: str) -> list:
 def parse_config_lines(lines: list) -> dict:
     raw_config = {}
 
+    for line_number, line in enumerate(lines, start=1):
+        line = line.strip()
 
+        if not line or line.startswith('#'):
+            continue
 
+        parts = line.split('=')
+        if len(parts) != 2:
+            raise ValueError(f"Line {line_number}: invalid format")
+
+        key = parts[0].strip()
+        value = parts[1].strip()
+
+        if not key:
+            raise ValueError(f"Line {line_number}: Empty key")
+        if not value:
+            raise ValueError(f"Line {line_number}: Empty value")
+        if key in raw_config:
+            raise ValueError(f"Line {line_number}: Duplicated key {key}")
+
+        raw_config[key] = value
     return raw_config
+
+
+def validate_required_keys(raw_config: dict):
+    for key in REQUIRED_KEYS:
+        if key not in raw_config:
+            raise ValueError(f"Missing key: {key}")
 
 
 def parse_config_value(key, value):
