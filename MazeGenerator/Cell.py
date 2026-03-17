@@ -9,9 +9,8 @@ class Cell():
     def break_wall(self, direction: str) -> None:
         self._walls.update({direction: 0})
 
-    def visited(self) -> bool:
+    def visited(self) -> None:
         self._visited = True
-        return self._visited
 
     def get_hex(self) -> str:
         bit_weights = {'N': 1,

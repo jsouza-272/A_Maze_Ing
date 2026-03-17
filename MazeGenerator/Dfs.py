@@ -7,14 +7,14 @@ class Dfs():
         self.seed = random.Random(seed)
 
     def generate_maze(self, maze: Maze,
-                      entry: tuple[int], exit: tuple[int]) -> None:
+                      entry: tuple[int, int], exit: tuple[int, int]) -> None:
         stack: list = [entry]
         candidates = maze.unvisited_neighbors(*stack[-1])
         while stack:
             cx, cy = stack[-1]
             maze.maze[cy][cx].visited()
             candidates = maze.unvisited_neighbors(cx, cy)
-            if len(candidates) == 0:
+            if len(candidates) == 0 or (cx, cy) == exit:
                 stack.pop()
             else:
                 nx, ny = self.seed.choice(candidates)

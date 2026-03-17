@@ -11,9 +11,9 @@ class MazeGenerator():
         self.perfect = perfect
         self.seed = seed
 
-    def generate_maze(self):
+    def generate_maze(self) -> None:
         algorithm = Dfs(self.seed)
-        algorithm.generate_maze(self.maze, self.entry, exit)
+        algorithm.generate_maze(self.maze, self.entry, self.exit)
 
-    def show_maze(self):
-        print(self.maze.get_hex_maze())
+    def get_maze(self) -> str:
+        return self.maze.get_hex_maze()

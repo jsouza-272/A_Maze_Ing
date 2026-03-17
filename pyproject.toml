@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "a-maze-ing"
+version = "0.1.0"
+description = ""
+authors = ["Jsouza <joaovssouza27@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mypy = "^1.19.1"
+pydantic = "^2.12.5"
+pydantic-settings = "^2.13.1"
+flake8 = "^7.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
