@@ -29,22 +29,36 @@ class Maze():
                      and not self.maze[ny][nx]._visited]
         return neighbors
 
-    def get_pos(self, cell: Cell) -> tuple[int]:
+    def get_neighbors(self, x: int, y: int,
+                      reject: set | None = None) -> list[tuple]:
+        directions = {'N': (x, y - 1),
+                      'E': (x + 1, y),
+                      'S': (x, y + 1),
+                      'W': (x - 1, y)}
+        neighbors = self.maze[y][x].get_path()
+        if reject is None:
+            return [directions[neighbor] for neighbor in neighbors]
+        return [directions[neighbor] for neighbor in neighbors
+                if directions[neighbor] not in reject]
+
+    def get_pos(self, cell: Cell) -> tuple[int, int] | None:
         for y in range(0, self.heigth):
             for x in range(0, self.width):
                 if cell is self.maze[y][x]:
                     return x, y
-        return -1, -1
+        return None
 
     @staticmethod
     def direction(current: tuple[int, int], next: tuple[int, int]) -> str:
         cx, cy = current
         nx, ny = next
+        direction = ''
         if cx > nx:
-            return 'W'
+            direction = 'W'
         if cx < nx:
-            return 'E'
+            direction = 'E'
         if cy > ny:
-            return 'N'
+            direction = 'N'
         if cy < ny:
-            return 'S'
+            direction = 'S'
+        return direction

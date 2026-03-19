@@ -20,3 +20,7 @@ class Cell():
         total = sum([self._walls[key] * value
                      for key, value in bit_weights.items()])
         return '0123456789abcdef'[total]
+
+    def get_path(self) -> list[str]:
+        return [key for key in self._walls.keys()
+                if self._walls[key] == 0]

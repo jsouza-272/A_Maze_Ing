@@ -3,8 +3,9 @@ from .Dfs import Dfs
 
 
 class MazeGenerator():
-    def __init__(self, width: int, height: int, entry: tuple[int],
-                 exit: tuple[int], perfect: bool, seed: int = 42) -> None:
+    def __init__(self, width: int, height: int, entry: tuple[int, int],
+                 exit: tuple[int, int],
+                 perfect: bool, seed: int = 42) -> None:
         self.maze = Maze(width, height)
         self.entry = entry
         self.exit = exit
