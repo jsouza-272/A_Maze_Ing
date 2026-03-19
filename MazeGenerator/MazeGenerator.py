@@ -18,3 +18,40 @@ class MazeGenerator():
 
     def get_maze(self) -> str:
         return self.maze.get_hex_maze()
+
+    def draw_maze(self):
+        w = self.maze.width
+        h = self.maze.heigth
+
+        top = '+'
+        for c in range(w):
+            cell = self.maze.maze[0][c]
+            if cell._walls['N']:
+                top += "---+"
+            else:
+                top += "   +"
+        print(top)
+
+        for y in range(h):
+            mid = ""
+            bottom = '+'
+
+            for x in range(w):
+                cell = self.maze.maze[y][x]
+                if cell._walls['W']:
+                    mid += '|'
+                else:
+                    mid += ' '
+
+                if cell._walls['S']:
+                    bottom += "---+"
+                else:
+                    bottom += "   +"
+
+            last = self.maze.maze[y][-1]
+            if last._walls['E']:
+                mid += '|'
+            else:
+                " "
+            print(mid)
+            print(bottom)
