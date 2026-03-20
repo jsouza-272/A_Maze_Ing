@@ -1,4 +1,5 @@
-from .Maze import Maze
+from ..maze.Maze import Maze
+from ..Errors import AstarError
 
 
 class Astar():
@@ -7,7 +8,7 @@ class Astar():
         result = abs(pos[0] - goal[0]) + abs(pos[1] - goal[1])
         return result
 
-    def algorithm(self, maze: Maze, entry: tuple, exit: tuple) -> str:
+    def algorithm(self, maze: Maze, entry: tuple, exit: tuple) -> list[tuple]:
         g = 0
         h = self.manhattan(entry, exit)
         f_score = {entry: g + h}
@@ -41,10 +42,10 @@ class Astar():
             if current_node == exit:
                 return self.make_path(came_from, entry, exit)
 
-        raise ValueError("Error: path not exist")
+        raise AstarError("Error: path not exist")
 
     def make_path(self, came_from: dict[tuple, tuple],
-                  entry: tuple, exit: tuple) -> str:
+                  entry: tuple, exit: tuple) -> list[tuple]:
         path = {}
         current = exit
         while True:
@@ -52,8 +53,12 @@ class Astar():
             current = came_from[current]
             if current == entry:
                 break
-        cardinal_path = ''
         list_path = list(path.values())
+        list_path.pop()
+        return list_path
+
+    def make_cardinal_path(self, list_path: list[tuple]) -> str:
+        cardinal_path = ''
         while list_path:
             xy = list_path.pop()
             if list_path:

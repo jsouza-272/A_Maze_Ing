@@ -19,8 +19,13 @@ class Cell():
                        'W': 8}
         total = sum([self._walls[key] * value
                      for key, value in bit_weights.items()])
-        return '0123456789abcdef'[total]
+        return '0123456789ABCDEF'[total]
 
     def get_path(self) -> list[str]:
         return [key for key in self._walls.keys()
                 if self._walls[key] == 0]
+
+    def close_block(self) -> bool:
+        if 0 in self._walls.values():
+            return False
+        return True

@@ -1,5 +1,6 @@
-from .Maze import Maze
-from .Dfs import Dfs
+from .maze.Maze import Maze
+from .algorithms.Dfs import Dfs
+from .Errors import FtError
 
 
 class MazeGenerator():
@@ -13,45 +14,39 @@ class MazeGenerator():
         self.seed = seed
 
     def generate_maze(self) -> None:
+        try:
+            self.do_ft()
+        except FtError as e:
+            print(e)
         algorithm = Dfs(self.seed)
         algorithm.generate_maze(self.maze, self.entry, self.exit)
 
+    def do_ft(self) -> None:
+        if 9 <= self.maze.width and 7 <= self.maze.heigth:
+            bitmap = ['#.#.###',
+                      '#.....#',
+                      '###.###',
+                      '..#.#..',
+                      '..#.###']
+        elif 8 <= self.maze.width and 6 <= self.maze.heigth:
+            bitmap = ['#.#.##',
+                      '###..#',
+                      '..#.#.',
+                      '..#.##']
+        else:
+            raise FtError('Error: maze too small')
+        bitmap_h = len(bitmap)
+        bitmap_w = len(bitmap[0])
+        sy = int((self.maze.heigth - bitmap_h) / 2)
+        sx = int((self.maze.width - bitmap_w) / 2)
+        for h in range(0, bitmap_h):
+            for w in range(0, bitmap_w):
+                if self.exit == (w, h):
+                    raise FtError('Error: exit point in "42" patern')
+                if self.entry == (w + sx, h + sy):
+                    raise FtError('Error: entry point in "42" patern')
+                if bitmap[h][w] == '#':
+                    self.maze.maze[sy + h][sx + w].visited()
+
     def get_maze(self) -> str:
         return self.maze.get_hex_maze()
-
-    def draw_maze(self):
-        w = self.maze.width
-        h = self.maze.heigth
-
-        top = '+'
-        for c in range(w):
-            cell = self.maze.maze[0][c]
-            if cell._walls['N']:
-                top += "---+"
-            else:
-                top += "   +"
-        print(top)
-
-        for y in range(h):
-            mid = ""
-            bottom = '+'
-
-            for x in range(w):
-                cell = self.maze.maze[y][x]
-                if cell._walls['W']:
-                    mid += '|'
-                else:
-                    mid += ' '
-
-                if cell._walls['S']:
-                    bottom += "---+"
-                else:
-                    bottom += "   +"
-
-            last = self.maze.maze[y][-1]
-            if last._walls['E']:
-                mid += '|'
-            else:
-                " "
-            print(mid)
-            print(bottom)

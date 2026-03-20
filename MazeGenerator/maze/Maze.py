@@ -1,4 +1,4 @@
-from MazeGenerator.Cell import Cell
+from MazeGenerator.maze.Cell import Cell
 
 
 class Maze():
@@ -41,12 +41,12 @@ class Maze():
         return [directions[neighbor] for neighbor in neighbors
                 if directions[neighbor] not in reject]
 
-    def get_pos(self, cell: Cell) -> tuple[int, int] | None:
+    def get_pos(self, cell: Cell) -> tuple[int, int]:
         for y in range(0, self.heigth):
             for x in range(0, self.width):
                 if cell is self.maze[y][x]:
                     return x, y
-        return None
+        raise KeyError('Error: cell not in maze')
 
     @staticmethod
     def direction(current: tuple[int, int], next: tuple[int, int]) -> str:
