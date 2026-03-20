@@ -1,6 +1,6 @@
 from .MazeGenerator import MazeGenerator
 from .Ui import Ui
-from .pathfinder.Astar import Astar
+from .algorithms.Astar import Astar
 
 
 if __name__ == "__main__":
