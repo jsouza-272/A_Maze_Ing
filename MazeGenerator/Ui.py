@@ -6,7 +6,7 @@ class Ui():
         self.maze = maze
         self.path = path
 
-    def render(self) -> str:
+    def render(self) -> list:
         w = self.maze.width
         h = self.maze.heigth
         b = 255
@@ -49,7 +49,7 @@ class Ui():
             render_maze.append(bottom)
         return render_maze
 
-    def render_path(self) -> str:
+    def render_path(self) -> list:
         w = self.maze.width
         h = self.maze.heigth
         b = 255
@@ -104,7 +104,7 @@ class Ui():
             render_maze.append(bottom)
         return render_maze
 
-    def show_maze(self, path: bool = False):
+    def show_maze(self, path: bool = False) -> None:
         if path:
             for line in self.render_path():
                 print(line)

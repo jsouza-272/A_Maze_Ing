@@ -28,7 +28,7 @@ def validate_args() -> str:
     if len(sys.argv) != 2:
         print("Error: correct use python3 a_maze_ing.py config.txt")
         sys.exit(1)
-    cfg_path: str = sys.argv[1]
+    cfg_path = sys.argv[1]
     return cfg_path
 
 
@@ -171,8 +171,8 @@ def parse_coordinates(value: str, key_name: str) -> tuple:
     if len(parts) != 2:
         raise ValueError(f"{key_name} must be in format x,y")
     try:
-        x: int = int(parts[0].strip())
-        y: int = int(parts[1].strip())
+        x = int(parts[0].strip())
+        y = int(parts[1].strip())
     except ValueError:
         raise ValueError(f"{key_name} must contain valid integers")
     return (x, y)
