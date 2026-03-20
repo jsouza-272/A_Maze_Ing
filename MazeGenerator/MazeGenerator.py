@@ -5,11 +5,12 @@ from .Errors import FtError
 
 class MazeGenerator():
     def __init__(self, width: int, height: int, entry: tuple[int, int],
-                 exit: tuple[int, int],
+                 exit: tuple[int, int], output_file: str,
                  perfect: bool, seed: int = 42) -> None:
         self.maze = Maze(width, height)
         self.entry = entry
         self.exit = exit
+        self.output_file = output_file
         self.perfect = perfect
         self.seed = seed
 
@@ -50,3 +51,7 @@ class MazeGenerator():
 
     def get_maze(self) -> str:
         return self.maze.get_hex_maze()
+
+    def save_maze(self) -> None:
+        with open(self.output_file, 'w') as file:
+            file.write(self.get_maze())

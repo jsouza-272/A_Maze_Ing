@@ -2,12 +2,12 @@ import sys
 
 
 REQUIRED_KEYS: list = [
-    "WIDTH",
-    "HEIGHT",
-    "ENTRY",
-    "EXIT",
-    "OUTPUT_FILE",
-    "PERFECT"
+    "width",
+    "height",
+    "entry",
+    "exit",
+    "output_file",
+    "perfect"
 ]
 
 
@@ -97,7 +97,7 @@ def parse_config_lines(lines: list) -> dict:
         if len(parts) != 2:
             raise ValueError(f"Line {line_number}: invalid format")
 
-        key = parts[0].strip()
+        key = parts[0].strip().lower()
         value = parts[1].strip()
 
         if not key:
@@ -249,12 +249,12 @@ def build_and_validate_config(raw_config: dict) -> dict:
     """
     validate_required_keys(raw_config)
 
-    width = parse_int(raw_config["WIDTH"], "WIDTH")
-    height = parse_int(raw_config["HEIGHT"], "HEIGHT")
-    entry = parse_coordinates(raw_config["ENTRY"], "ENTRY")
-    exit_point = parse_coordinates(raw_config["EXIT"], "EXIT")
-    output_file = raw_config["OUTPUT_FILE"].strip()
-    perfect = parse_bool(raw_config["PERFECT"], "PERFECT")
+    width = parse_int(raw_config["width"], "width")
+    height = parse_int(raw_config["height"], "height")
+    entry = parse_coordinates(raw_config["entry"], "entry")
+    exit_point = parse_coordinates(raw_config["exit"], "exit")
+    output_file = raw_config["output_file"].strip()
+    perfect = parse_bool(raw_config["perfect"], "perfect")
 
     if width <= 0:
         raise ValueError("WIDTH must be greater than 0")
@@ -270,16 +270,16 @@ def build_and_validate_config(raw_config: dict) -> dict:
         raise ValueError("ENTRY and EXIT must be different")
 
     config = {
-        "WIDTH": width,
-        "HEIGHT": height,
-        "ENTRY": entry,
-        "EXIT": exit_point,
-        "OUTPUT_FILE": output_file,
-        "PERFECT": perfect
+        "width": width,
+        "height": height,
+        "entry": entry,
+        "exit": exit_point,
+        "output_file": output_file,
+        "perfect": perfect
     }
 
-    if "SEED" in raw_config:
-        config["SEED"] = parse_int(raw_config["SEED"], "SEED")
+    if "seed" in raw_config:
+        config["seed"] = parse_int(raw_config["seed"], "seed")
 
     return config
 
@@ -301,6 +301,7 @@ def load_and_parse_config(cfg_path: str) -> dict:
         ValueError: If the file contents are invalid.
         SystemExit: If the file cannot be opened.
     """
+    cfg_path = validate_args()
     lines = load_config_file(cfg_path)
     raw_config = parse_config_lines(lines)
     return build_and_validate_config(raw_config)
