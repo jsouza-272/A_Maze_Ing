@@ -48,6 +48,11 @@ class Maze():
                     return x, y
         raise KeyError('Error: cell not in maze')
 
+    def reset_visited(self) -> None:
+        for line in self.maze:
+            for _ in line:
+                _.reset()
+
     @staticmethod
     def direction(current: tuple[int, int], next: tuple[int, int]) -> str:
         cx, cy = current

@@ -12,6 +12,9 @@ class Cell():
     def visited(self) -> None:
         self._visited = True
 
+    def reset(self) -> None:
+        self._visited = False
+
     def get_hex(self) -> str:
         bit_weights = {'N': 1,
                        'E': 2,

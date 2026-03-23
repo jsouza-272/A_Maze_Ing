@@ -21,6 +21,13 @@ class MazeGenerator():
             print(e)
         algorithm = Dfs(self.seed)
         algorithm.generate_maze(self.maze, self.entry, self.exit)
+        if not self.perfect:
+            self.maze.reset_visited()
+            try:
+                self.do_ft()
+            except FtError:
+                pass
+            algorithm.generate_maze(self.maze, self.entry, self.exit)
 
     def do_ft(self) -> None:
         if 9 <= self.maze.width and 7 <= self.maze.heigth:

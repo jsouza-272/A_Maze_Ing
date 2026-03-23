@@ -284,7 +284,7 @@ def build_and_validate_config(raw_config: dict) -> dict:
     return config
 
 
-def load_and_parse_config(cfg_path: str) -> dict:
+def load_and_parse_config() -> dict:
     """
     Load, parse, and validate the configuration file.
 
