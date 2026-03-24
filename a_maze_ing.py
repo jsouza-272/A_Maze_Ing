@@ -6,9 +6,9 @@ import os
 if __name__ == "__main__":
     try:
         show = False
-        choise = 1
-        while choise != 0:
-            if choise == 1:
+        choice = 1
+        while choice != 0:
+            if choice == 1:
                 os.system('clear')
                 config = load_and_parse_config()
                 generator = MazeGenerator(**config)
@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
                 ui = Ui(generator.maze, path)
                 ui.show_maze(config['entry'], config['exit'], show)
-            elif choise == 2:
+            elif choice == 2:
                 os.system('clear')
                 if not show:
                     show = True
@@ -31,6 +31,6 @@ if __name__ == "__main__":
                 else:
                     show = False
                     ui.show_maze(config['entry'], config['exit'], show)
-            choise = int(input())
+            choice = int(input())
     except ValueError as e:
         print(e)

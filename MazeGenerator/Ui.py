@@ -133,4 +133,4 @@ class Ui():
             render_maze.append(line2)
             render_maze.append(line2)
         render_maze.append(final_line)
-        return 
+        return
