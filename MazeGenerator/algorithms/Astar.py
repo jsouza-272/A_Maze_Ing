@@ -57,7 +57,9 @@ class Astar():
         list_path.pop()
         return list_path
 
-    def make_cardinal_path(self, list_path: list[tuple]) -> str:
+    @staticmethod
+    def make_cardinal_path(list_path: list[tuple],
+                           exit: tuple[int, int]) -> str:
         cardinal_path = ''
         while list_path:
             xy = list_path.pop()

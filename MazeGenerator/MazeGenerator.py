@@ -61,4 +61,8 @@ class MazeGenerator():
 
     def save_maze(self) -> None:
         with open(self.output_file, 'w') as file:
-            file.write(self.get_maze())
+            file.write(f'{self.get_maze()}\n')
+            x, y = self.entry
+            file.write(f'{x}, {y}\n')
+            x, y = self.exit
+            file.write(f'{x}, {y}\n')

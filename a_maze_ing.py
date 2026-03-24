@@ -14,11 +14,17 @@ if __name__ == "__main__":
                 generator = MazeGenerator(**config)
                 generator.generate_maze()
                 generator.save_maze()
-                ui = Ui(generator.maze, Astar().
-                        algorithm(generator.maze,
-                                  config['entry'], config['exit']))
+                path = Astar().algorithm(generator.maze,
+                                         config['entry'], config['exit'])
+
+                with open(config['output_file'], 'a') as output_file:
+                    output_file.write(Astar.make_cardinal_path(
+                        path.copy(), config['exit']))
+
+                ui = Ui(generator.maze, path)
                 ui.show_maze(config['entry'], config['exit'], show)
             elif choise == 2:
+                os.system('clear')
                 if not show:
                     show = True
                     ui.show_maze(config['entry'], config['exit'], show)
