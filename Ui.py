@@ -31,7 +31,8 @@ class Ui():
 
         Args:
             maze (Maze): Maze to display.
-            path (list[tuple[int, int]]): Path coordinates to optionally render.
+            path (list[tuple[int, int]]): Path coordinates to
+            optionally render.
         """
         self.maze = maze
         self.path = path

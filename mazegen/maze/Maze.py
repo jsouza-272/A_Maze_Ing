@@ -84,7 +84,8 @@ class Maze():
     def get_neighbors(self, x: int, y: int,
                       reject: set | None = None) -> list[tuple]:
         """
-        Return the coordinates of cells reachable from (x, y) through open walls.
+        Return the coordinates of cells reachable from
+        (x, y) through open walls.
 
         Only directions where the wall has been removed (``Cell.get_path``) are
         considered. An optional ``reject`` set can be used to exclude already
