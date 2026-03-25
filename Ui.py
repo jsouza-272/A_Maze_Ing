@@ -1,12 +1,48 @@
+"""
+Terminal UI utilities for rendering and interacting with a maze.
+
+This module provides a simple text-based interface that:
+- prints a menu to the user
+- validates user input
+- renders the maze using ANSI color codes
+- optionally overlays the solution path from entry to exit
+"""
 from mazegen.maze.Maze import Maze
 
 
 class Ui():
+    """
+    Terminal UI for displaying a Maze and an optional solution path.
+
+    The UI is responsible for:
+    - printing the menu and collecting user choices
+    - rendering the maze with ANSI colors
+    - rendering the maze with the solution path overlay
+
+    Args:
+        maze (Maze): Maze instance to render.
+        path (list[tuple[int, int]]): List of coordinates representing the
+            solution path.
+    """
+
     def __init__(self, maze: Maze, path: list) -> None:
+        """
+        Initialize the UI with a maze instance and a precomputed path.
+
+        Args:
+            maze (Maze): Maze to display.
+            path (list[tuple[int, int]]): Path coordinates to optionally render.
+        """
         self.maze = maze
         self.path = path
 
     def menu(self, show: bool) -> None:
+        """
+        Print the interactive menu to stdout.
+
+        Args:
+            show (bool): Whether the path overlay is currently enabled.
+        """
         print("\n=== A-Maze-Ing ===")
         print("1. Re-generate a new maze")
         print(f"2. Show path from entry to exit ({show})")
@@ -15,6 +51,14 @@ class Ui():
         print('\nChoice (0-3):', end=' ')
 
     def input_validate(self) -> int:
+        """
+        Read and validate the user's menu choice.
+
+        Keeps prompting until a valid integer is provided.
+
+        Returns:
+            int: The validated menu choice.
+        """
         while True:
             try:
                 choice = int(input())
@@ -24,6 +68,15 @@ class Ui():
 
     def show_maze(self, entry: tuple, exit: tuple,
                   rgb: tuple, path: bool = False) -> None:
+        """
+        Print the maze to stdout, optionally showing the solution path.
+
+        Args:
+            entry (tuple[int, int]): Entry coordinate (x, y).
+            exit (tuple[int, int]): Exit coordinate (x, y).
+            rgb (tuple[int, int, int]): Maze wall color as (r, g, b).
+            path (bool): If True, overlay the solution path.
+        """
         if path:
             for line in self.render_path(entry, exit, rgb):
                 for _ in line:
@@ -36,6 +89,21 @@ class Ui():
                 print()
 
     def render(self, entry: tuple, exit: tuple, rgb: tuple) -> list[list[str]]:
+        """
+        Build a rendered representation of the maze without the solution path.
+
+        The output is a 2-D list of strings where each string contains ANSI
+        escape codes and block characters.
+
+        Args:
+            entry (tuple[int, int]): Entry coordinate (x, y).
+            exit (tuple[int, int]): Exit coordinate (x, y).
+            rgb (tuple[int, int, int]): Maze wall color as (r, g, b).
+
+        Returns:
+            list[list[str]]: Lines and segments to be printed to display the
+                maze.
+        """
         r, g, b = rgb
         render_maze = []
         w = self.maze.width
@@ -90,6 +158,18 @@ class Ui():
 
     def render_path(self, entry: tuple, exit: tuple,
                     rgb: tuple) -> list[list[str]]:
+        """
+        Build a rendered representation of the maze with the solution path.
+
+        Args:
+            entry (tuple[int, int]): Entry coordinate (x, y).
+            exit (tuple[int, int]): Exit coordinate (x, y).
+            rgb (tuple[int, int, int]): Maze wall color as (r, g, b).
+
+        Returns:
+            list[list[str]]: Lines and segments to be printed with a path
+                overlay.
+        """
         r, g, b = rgb
         path_color = '\033[48;2;0;255;0m'
         reset_color = '\033[0m'

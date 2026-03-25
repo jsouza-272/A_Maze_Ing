@@ -1,3 +1,14 @@
+"""
+Configuration parsing pipeline for A-Maze-Ing.
+
+This module handles the full lifecycle of reading and validating the
+configuration file passed on the command line:
+- validates that exactly one CLI argument (the config file path) was given
+- reads the file from disk
+- parses KEY=VALUE lines while ignoring blanks and comments
+- type-converts and validates each value
+- returns a ready-to-use configuration dictionary to the caller
+"""
 import sys
 
 
