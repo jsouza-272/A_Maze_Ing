@@ -3,7 +3,9 @@ import random
 
 
 class Dfs():
-    def __init__(self, seed: int = 42):
+    def __init__(self, seed: int | None = None):
+        if seed is None:
+            self.seed = random.Random()
         self.seed = random.Random(seed)
 
     def generate_maze(self, maze: Maze,

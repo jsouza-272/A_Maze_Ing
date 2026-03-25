@@ -6,7 +6,7 @@ from .Errors import FtError
 class MazeGenerator():
     def __init__(self, width: int, height: int, entry: tuple[int, int],
                  exit: tuple[int, int], output_file: str,
-                 perfect: bool, seed: int = 42) -> None:
+                 perfect: bool, seed: int | None = None) -> None:
         self.maze = Maze(width, height)
         self.entry = entry
         self.exit = exit

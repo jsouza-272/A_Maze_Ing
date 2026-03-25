@@ -1,4 +1,4 @@
-from MazeGenerator.maze.Cell import Cell
+from mazegen.maze.Cell import Cell
 
 
 class Maze():
