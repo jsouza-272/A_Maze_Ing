@@ -1,3 +1,19 @@
+"""
+Main entry point for the A-Maze-Ing application.
+
+This script orchestrates the whole maze generation and solving pipeline:
+- loads and validates configuration from a config file
+- generates a maze (perfect or imperfect) with an optional "42" obstacle
+- solves the maze using the A* algorithm
+- writes the resulting cardinal path to the configured output file
+- renders an interactive terminal UI for visualization
+
+Run:
+    python3 a_maze_ing.py config.txt
+
+Raises:
+    ValueError: If configuration values are invalid.
+"""
 from parser import load_and_parse_config
 from mazegen import MazeGenerator, Astar
 from Ui import Ui

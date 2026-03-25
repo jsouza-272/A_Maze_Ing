@@ -1,14 +1,53 @@
+"""
+A* pathfinding algorithm for maze solving.
+
+This module implements the A* search algorithm using Manhattan distance as the
+heuristic function.  It operates on a Maze instance and returns a list of
+coordinates representing the shortest path from entry to exit.
+"""
 from ..maze.Maze import Maze
 from ..Errors import AstarError
 
 
 class Astar():
+    """
+    A* pathfinding algorithm.
+
+    Uses Manhattan distance as the heuristic to find the shortest path between
+    two coordinates inside a Maze.
+    """
+
     @staticmethod
     def manhattan(pos: tuple[int, int], goal: tuple[int, int]) -> int:
+        """
+        Compute the Manhattan distance between two grid positions.
+
+        Args:
+            pos (tuple[int, int]): Current position (x, y).
+            goal (tuple[int, int]): Target position (x, y).
+
+        Returns:
+            int: Sum of absolute differences of x and y coordinates.
+        """
         result = abs(pos[0] - goal[0]) + abs(pos[1] - goal[1])
         return result
 
     def algorithm(self, maze: Maze, entry: tuple, exit: tuple) -> list[tuple]:
+        """
+        Run the A* search on the given maze.
+
+        Args:
+            maze (Maze): Maze instance to search through.
+            entry (tuple[int, int]): Start coordinate (x, y).
+            exit (tuple[int, int]): Goal coordinate (x, y).
+
+        Returns:
+            list[tuple[int, int]]: Ordered list of coordinates from entry to
+                exit (exclusive of the exit node itself).
+
+        Raises:
+            AstarError: If no path exists between entry and exit.
+        """
         g = 0
         h = self.manhattan(entry, exit)
         f_score = {entry: g + h}
@@ -46,6 +85,22 @@ class Astar():
 
     def make_path(self, came_from: dict[tuple, tuple],
                   entry: tuple, exit: tuple) -> list[tuple]:
+        """
+        Reconstruct the path from the came_from map.
+
+        Traces backwards from ``exit`` through ``came_from`` until ``entry``
+        is reached, then returns the intermediate coordinates in forward order
+        (entry is excluded from the result).
+
+        Args:
+            came_from (dict[tuple, tuple]): Mapping of node to its predecessor.
+            entry (tuple[int, int]): Start coordinate (x, y).
+            exit (tuple[int, int]): Goal coordinate (x, y).
+
+        Returns:
+            list[tuple[int, int]]: Intermediate path coordinates from just
+                after entry up to and including exit.
+        """
         path = {}
         current = exit
         while True:
@@ -60,6 +115,20 @@ class Astar():
     @staticmethod
     def make_cardinal_path(list_path: list[tuple],
                            exit: tuple[int, int]) -> str:
+        """
+        Convert a list of path coordinates into a cardinal-direction string.
+
+        Each consecutive pair of coordinates is translated into a compass
+        direction (N, E, S, W) using ``Maze.direction``.
+
+        Args:
+            list_path (list[tuple[int, int]]): Mutable list of path
+                coordinates (will be consumed by this method).
+            exit (tuple[int, int]): Final destination coordinate (x, y).
+
+        Returns:
+            str: String of cardinal direction characters representing the path.
+        """
         cardinal_path = ''
         while list_path:
             xy = list_path.pop()
