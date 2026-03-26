@@ -16,6 +16,7 @@ Raises:
 """
 from parser import load_and_parse_config
 from mazegen import MazeGenerator, Astar
+from mazegen.algorithms import Dfs, Prim
 from Ui import Ui
 import os
 
@@ -24,12 +25,22 @@ if __name__ == "__main__":
     try:
         show = False
         choice = 1
-        rgb = (255, 255, 255)
+        rgb_list = [(255, 255, 255), (240, 224, 0)]
+        rgb_index = 0
+        rgb = rgb_list[rgb_index]
+        algorithm = Dfs
         while choice != 0:
-            os.system('clear')
+            message = None
+            if choice == 3:
+                if algorithm == Dfs:
+                    algorithm = Prim
+                else:
+                    algorithm = Dfs
+                choice = 1
+
             if choice == 1:
                 config = load_and_parse_config()
-                generator = MazeGenerator(**config)
+                generator = MazeGenerator(**config, algorithm=algorithm)
                 generator.generate_maze()
                 generator.save_maze()
                 path = Astar().algorithm(generator.maze,
@@ -46,14 +57,55 @@ if __name__ == "__main__":
                 else:
                     show = False
 
-            elif choice == 3:
-                if rgb == (255, 255, 255):
-                    rgb = (240, 224, 0)
-                else:
-                    rgb = (255, 255, 255)
+            elif choice == 4:
+                rgb_index += 1
+                if rgb_index >= len(rgb_list):
+                    rgb_index = 0
+                rgb = rgb_list[rgb_index]
 
+            elif choice == 5:
+                while True:
+                    try:
+                        r = int(input('R: '))
+                        if r > 255 or r < 0:
+                            raise KeyError(
+                                f'Error: R ({r}) out of range 0-255')
+                        g = int(input('G: '))
+                        if g > 255 or g < 0:
+                            raise KeyError(
+                                f'Error: G ({g}) out of range 0-255')
+                        b = int(input('B: '))
+                        if b > 255 or b < 0:
+                            raise KeyError(
+                                f'Error: B ({b}) out of range 0-255')
+                        break
+                    except ValueError:
+                        print('Please insert a number in range 0-255')
+                    except KeyError as e:
+                        print(e.args[0])
+                if (r, g, b) not in rgb_list:
+                    rgb_list.append((r, g, b))
+                    message = f'({r}, {g}, {b}) has been added to the list'
+                else:
+                    message = f'({r}, {g}, {b}) is already on the list'
+
+            elif choice == 6:
+                try:
+                    if len(rgb_list) == 2:
+                        raise ValueError('It is not possible to \
+remove the default colors')
+                    else:
+                        message = f'{rgb_list.pop()} removed'
+                        if rgb not in rgb_list:
+                            rgb = rgb_list[-1]
+                except ValueError as e:
+                    message = e.args[0]
+
+            os.system('clear')
             ui.show_maze(config['entry'], config['exit'], rgb, show)
-            ui.menu(show)
+            if message is not None:
+                print(message)
+            ui.menu(show, algorithm.__name__)
             choice = ui.input_validate()
     except ValueError as e:
         print(e)

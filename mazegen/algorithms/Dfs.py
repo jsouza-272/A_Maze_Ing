@@ -4,7 +4,7 @@ Depth-first search maze carving algorithm.
 This module implements the iterative DFS-based maze carving algorithm used to
 generate perfect or imperfect mazes by randomly removing walls between cells.
 """
-from ..maze.Maze import Maze
+from mazegen.maze import Maze
 import random
 
 
@@ -28,8 +28,6 @@ class Dfs():
             seed (int | None): Seed for ``random.Random``. Pass ``None`` for a
                 non-deterministic random sequence.
         """
-        if seed is None:
-            self.seed = random.Random()
         self.seed = random.Random(seed)
 
     def generate_maze(self, maze: Maze,

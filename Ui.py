@@ -37,7 +37,7 @@ class Ui():
         self.maze = maze
         self.path = path
 
-    def menu(self, show: bool) -> None:
+    def menu(self, show: bool, algorithm: str) -> None:
         """
         Print the interactive menu to stdout.
 
@@ -47,9 +47,12 @@ class Ui():
         print("\n=== A-Maze-Ing ===")
         print("1. Re-generate a new maze")
         print(f"2. Show path from entry to exit ({show})")
-        print("3. Rotate maze colors")
+        print(f"3. Change algorithm (current: {algorithm})")
+        print("4. Rotate maze colors")
+        print("5. Add an RGB color to the color list")
+        print("6. Remove the last RGB color from the color list")
         print("0. Quit")
-        print('\nChoice (0-3):', end=' ')
+        print('\nChoice (0-6):', end=' ')
 
     def input_validate(self) -> int:
         """

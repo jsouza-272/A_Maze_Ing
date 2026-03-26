@@ -7,8 +7,9 @@ This module defines the MazeGenerator class, which coordinates:
 - generation of a perfect or imperfect maze using DFS-based carving
 - serialization of the maze and entry/exit positions to an output file
 """
-from .maze.Maze import Maze
-from .algorithms.Dfs import Dfs
+from .maze import Maze
+from .algorithms import Dfs
+from .algorithms import Prim
 from .Errors import FtError
 
 
@@ -31,7 +32,8 @@ class MazeGenerator():
 
     def __init__(self, width: int, height: int, entry: tuple[int, int],
                  exit: tuple[int, int], output_file: str,
-                 perfect: bool, seed: int | None = None) -> None:
+                 perfect: bool, seed: int | None = None,
+                 algorithm: Dfs | Prim = Dfs) -> None:
         """
         Initialize a MazeGenerator with configuration values.
 
@@ -43,6 +45,7 @@ class MazeGenerator():
         self.output_file = output_file
         self.perfect = perfect
         self.seed = seed
+        self.algorithm = algorithm(seed)
 
     def generate_maze(self) -> None:
         """
@@ -62,7 +65,7 @@ class MazeGenerator():
             self.do_ft()
         except FtError as e:
             print(e)
-        algorithm = Dfs(self.seed)
+        algorithm = self.algorithm
         algorithm.generate_maze(self.maze, self.entry, self.exit)
         if not self.perfect:
             self.maze.reset_visited()
