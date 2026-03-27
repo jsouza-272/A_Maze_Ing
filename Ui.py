@@ -43,6 +43,7 @@ class Ui():
 
         Args:
             show (bool): Whether the path overlay is currently enabled.
+            algorithm (str): Name of the currently active generation algorithm.
         """
         print("\n=== A-Maze-Ing ===")
         print("1. Re-generate a new maze")
