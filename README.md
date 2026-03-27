@@ -6,7 +6,7 @@
 
 A-Maze-Ing is a Python maze generator that reads a configuration file, generates a (possibly perfect) maze, writes the result to an output file using a hexadecimal wall encoding, and provides an interactive terminal ASCII visual representation.
 
-A **perfect maze** has exactly one path between any two cells (no loops, no isolated regions). The generator uses a Depth-First Search (DFS) backtracker algorithm seeded for reproducibility. Every generated maze embeds a visible **"42" pattern** (when the maze is large enough) as a set of fully closed cells. An A* solver computes the shortest path from entry to exit, which can be shown or hidden in the visual display.
+A **perfect maze** has exactly one path between any two cells (no loops, no isolated regions). The generator supports two algorithms: **Depth-First Search (DFS)** backtracker and **randomized Prim's** algorithm, both seedable for reproducibility. Every generated maze embeds a visible **"42" pattern** (when the maze is large enough) as a set of fully closed cells. An A* solver computes the shortest path from entry to exit, which can be shown or hidden in the visual display.
 
 ---
 
@@ -59,7 +59,6 @@ The configuration file uses one `KEY=VALUE` pair per line. Lines starting with `
 | Key         | Description                                              | Example           |
 |-------------|----------------------------------------------------------|-------------------|
 | `SEED`      | Integer seed for reproducible random generation          | `SEED=42`         |
-| `ALGORITHM` | Generation algorithm (currently only `dfs` is supported) | `ALGORITHM=dfs`   |
 
 ### Example configuration file
 
@@ -119,16 +118,32 @@ EESSEENN...
 
 ---
 
-## Maze generation algorithm
+## Maze generation algorithms
 
-The maze is generated using the **Depth-First Search (DFS) recursive backtracker** algorithm (implemented in `mazegen/algorithms/Dfs.py`).
+Two algorithms are available, selectable interactively via the terminal menu:
 
-**Why DFS?**
+### Depth-First Search (DFS) — default
 
-- It naturally produces a **perfect maze** (a spanning tree of the grid graph), with exactly one path between any two cells, by carving passages without revisiting cells.
+The DFS recursive backtracker algorithm is implemented in `mazegen/algorithms/Dfs.py`.
+
+**Characteristics:**
+
+- Naturally produces a **perfect maze** (a spanning tree of the grid graph), with exactly one path between any two cells, by carving passages without revisiting cells.
 - It is straightforward to implement and to seed for reproducibility.
-- It creates mazes with long, winding corridors — visually interesting and easy to verify.
+- Creates mazes with long, winding corridors — visually interesting and easy to verify.
 - To generate an **imperfect maze** (when `PERFECT=False`), the DFS pass is run a second time on partially visited cells to add extra passages (loops), while still maintaining full connectivity.
+
+### Randomized Prim's algorithm
+
+The randomized Prim's algorithm is implemented in `mazegen/algorithms/Prim.py`.
+
+**Characteristics:**
+
+- Also produces a **perfect maze** (spanning tree), but with a different visual style — tends to generate mazes with many short branches radiating outward rather than long corridors.
+- Uses a frontier list of edges: starting from the entry cell, repeatedly picks a random edge connecting a visited cell to an unvisited one and removes the wall.
+- Seedable for reproducibility just like DFS.
+
+The active algorithm can be switched at runtime using **menu option 3**.
 
 The shortest path from entry to exit is found using the **A* algorithm** with Manhattan distance as the heuristic (`mazegen/algorithms/Astar.py`).
 
@@ -150,8 +165,9 @@ pip install dist/mazegen-0.1.0-py3-none-any.whl
 
 ```python
 from mazegen import MazeGenerator, Astar
+from mazegen.algorithms import Dfs, Prim
 
-# Instantiate the generator
+# Instantiate the generator (DFS algorithm by default)
 gen = MazeGenerator(
     width=20,
     height=15,
@@ -159,7 +175,8 @@ gen = MazeGenerator(
     exit=(19, 14),
     output_file="maze.txt",
     perfect=True,
-    seed=42          # optional: omit for a random maze
+    seed=42,          # optional: omit for a random maze
+    algorithm=Dfs     # optional: use Prim for Prim's algorithm
 )
 
 # Generate and save the maze
@@ -193,6 +210,7 @@ print(cardinal)  # e.g. "EESSENN..."
 | `output_file`| `str`            | —       | Output file path                         |
 | `perfect`    | `bool`           | —       | `True` for a perfect maze, `False` for loops |
 | `seed`       | `int | None`     | `None`  | RNG seed for reproducibility             |
+| `algorithm`  | `Dfs | Prim`     | `Dfs`   | Generation algorithm class               |
 
 ### Accessing the maze structure and solution
 
@@ -229,18 +247,24 @@ After the maze is generated, an interactive menu is shown in the terminal:
 === A-Maze-Ing ===
 1. Re-generate a new maze
 2. Show path from entry to exit (False)
-3. Rotate maze colors
+3. Change algorithm (current: Dfs)
+4. Rotate maze colors
+5. Add an RGB color to the color list
+6. Remove the last RGB color from the color list
 0. Quit
 
-Choice (0-3):
+Choice (0-6):
 ```
 
-| Key / Input | Action                                           |
-|-------------|--------------------------------------------------|
-| `1`         | Re-generate a new random maze and display it     |
-| `2`         | Toggle showing / hiding the shortest path        |
-| `3`         | Cycle maze wall color (white ↔ 42 yellow)        |
-| `0`         | Quit the program                                 |
+| Key / Input | Action                                                   |
+|-------------|----------------------------------------------------------|
+| `1`         | Re-generate a new random maze and display it             |
+| `2`         | Toggle showing / hiding the shortest path                |
+| `3`         | Switch generation algorithm between DFS and Prim         |
+| `4`         | Cycle maze wall color through the current color list     |
+| `5`         | Add a custom RGB color to the wall color list            |
+| `6`         | Remove the last custom RGB color from the color list     |
+| `0`         | Quit the program                                         |
 
 ### Color coding
 
@@ -263,7 +287,7 @@ Choice (0-3):
 This is a solo project. All roles were handled by the same student:
 
 - **Architecture & design** — defining module boundaries (`mazegen`, `parser`, `Ui`)
-- **Algorithm implementation** — DFS backtracker for generation, A\* for solving
+- **Algorithm implementation** — DFS backtracker and Prim's algorithm for generation, A\* for solving
 - **Configuration & parsing** — full validation pipeline with clear error messages
 - **Output serialization** — hex encoding, entry/exit/path format
 - **Terminal UI** — ANSI rendering, interactive menu
