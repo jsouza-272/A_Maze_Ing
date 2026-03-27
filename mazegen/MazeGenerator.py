@@ -47,7 +47,7 @@ class MazeGenerator():
         self.seed = seed
         self.algorithm = algorithm(seed)
 
-    def generate_maze(self) -> None:
+    def generate_maze(self) -> None | str:
         """
         Generate the maze using DFS-based carving.
 
@@ -61,10 +61,11 @@ class MazeGenerator():
             FtError: If the maze is too small to place the "42" pattern
                 (the error is caught and printed; generation continues).
         """
+        message = None
         try:
             self.do_ft()
         except FtError as e:
-            print(e)
+            message = e.args[0]
         algorithm = self.algorithm
         algorithm.generate_maze(self.maze, self.entry, self.exit)
         if not self.perfect:
@@ -74,6 +75,7 @@ class MazeGenerator():
             except FtError:
                 pass
             algorithm.generate_maze(self.maze, self.entry, self.exit)
+        return message
 
     def do_ft(self) -> None:
         """

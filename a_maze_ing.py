@@ -41,7 +41,7 @@ if __name__ == "__main__":
             if choice == 1:
                 config = load_and_parse_config()
                 generator = MazeGenerator(**config, algorithm=algorithm)
-                generator.generate_maze()
+                message = generator.generate_maze()
                 generator.save_maze()
                 path = Astar().algorithm(generator.maze,
                                          config['entry'], config['exit'])
