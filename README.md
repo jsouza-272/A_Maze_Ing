@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by jsouza, csilva.*
+*This project has been created as part of the 42 curriculum by {jsouza, csilva}.*
 
 # A-Maze-Ing
 
@@ -284,7 +284,7 @@ Choice (0-6):
 
 ## Team & project management
 
-This is a solo project. All roles were handled by the same student:
+This is a group project. All roles were divided by jsouza and csilva:
 
 - **Architecture & design** — defining module boundaries (`mazegen`, `parser`, `Ui`)
 - **Algorithm implementation** — DFS backtracker and Prim's algorithm for generation, A\* for solving
