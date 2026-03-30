@@ -31,7 +31,7 @@ if __name__ == "__main__":
         rgb_list = [(255, 255, 255), (240, 224, 0)]
         rgb_index = 0
         rgb = rgb_list[rgb_index]
-        algorithm = Dfs
+        algorithm: type[Dfs] | type[Prim] = Dfs
         while choice != 0:
             message = None
             if choice == 3:

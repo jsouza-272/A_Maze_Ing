@@ -11,6 +11,7 @@ from .maze import Maze
 from .algorithms import Dfs
 from .algorithms import Prim
 from .Errors import FtError
+from typing import Type
 
 
 class MazeGenerator():
@@ -33,7 +34,7 @@ class MazeGenerator():
     def __init__(self, width: int, height: int, entry: tuple[int, int],
                  exit: tuple[int, int], output_file: str,
                  perfect: bool, seed: int | None = None,
-                 algorithm: Dfs | Prim = Dfs) -> None:
+                 algorithm: Type[Dfs] | Type[Prim] = Dfs) -> None:
         """
         Initialize a MazeGenerator with configuration values.
 
