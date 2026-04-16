@@ -64,3 +64,4 @@ class Prim():
                     maze.direction(chosen1, chosen2))
                 maze.maze[chosen2[1]][chosen2[0]].break_wall(
                     maze.direction(chosen2, chosen1))
+            yield maze

@@ -12,6 +12,9 @@ from .algorithms import Dfs
 from .algorithms import Prim
 from .Errors import FtError
 from typing import Type
+from Ui import Ui
+from time import sleep
+import os
 
 
 class MazeGenerator():
@@ -34,7 +37,7 @@ class MazeGenerator():
     def __init__(self, width: int, height: int, entry: tuple[int, int],
                  exit: tuple[int, int], output_file: str,
                  perfect: bool, seed: int | None = None,
-                 algorithm: Type[Dfs] | Type[Prim] = Dfs) -> None:
+                 algorithm: Type[Dfs] | Type[Prim] = Prim) -> None:
         """
         Initialize a MazeGenerator with configuration values.
 
@@ -66,9 +69,13 @@ class MazeGenerator():
         try:
             self.do_ft()
         except FtError as e:
+            self.maze.reset_visited()
             message = e.args[0]
         algorithm = self.algorithm
-        algorithm.generate_maze(self.maze, self.entry, self.exit)
+        for n in algorithm.generate_maze(self.maze, self.entry, self.exit):
+            os.system('clear')
+            Ui(n, []).show_maze(self.entry, exit, (255, 255, 255))
+            sleep(0.5)
         if not self.perfect:
             self.maze.reset_visited()
             try:
@@ -109,9 +116,9 @@ class MazeGenerator():
         sx = int((self.maze.width - bitmap_w) / 2)
         for h in range(0, bitmap_h):
             for w in range(0, bitmap_w):
-                if self.exit == (w, h):
+                if self.exit == (sx + w, sy + h) and bitmap[h][w] == '#':
                     raise FtError('Error: exit point in "42" patern')
-                if self.entry == (w + sx, h + sy):
+                if self.entry == (w + sx, h + sy) and bitmap[h][w] == '#':
                     raise FtError('Error: entry point in "42" patern')
                 if bitmap[h][w] == '#':
                     self.maze.maze[sy + h][sx + w].visited()

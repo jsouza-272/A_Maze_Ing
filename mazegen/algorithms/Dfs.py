@@ -60,3 +60,4 @@ class Dfs():
                 maze.maze[ny][nx].break_wall(maze.direction(
                     (nx, ny), (cx, cy)))
                 stack.append((nx, ny))
+            yield maze
