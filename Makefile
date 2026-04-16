@@ -6,7 +6,6 @@ CONFIG  = config.txt
 # Install
 .PHONY: install
 install:
-# 	python3 -m venv .amazeing
 	pip install -e .
 	pip install flake8
 	pip install mypy
