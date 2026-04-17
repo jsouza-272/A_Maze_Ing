@@ -88,3 +88,7 @@ class Cell():
         if 0 in self._walls.values():
             return False
         return True
+
+    def valid_cell(self):
+        walls = list(self._walls.values())
+        return walls.count(1) > 1

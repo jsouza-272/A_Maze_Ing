@@ -51,7 +51,7 @@ class MazeGenerator():
         self.seed = seed
         self.algorithm = algorithm(seed)
 
-    def generate_maze(self) -> None | str:
+    def generate_maze(self, animation: bool = False) -> None | str:
         """
         Generate the maze using DFS-based carving.
 
@@ -72,17 +72,28 @@ class MazeGenerator():
             self.maze.reset_visited()
             message = e.args[0]
         algorithm = self.algorithm
-        for n in algorithm.generate_maze(self.maze, self.entry, self.exit):
-            os.system('clear')
-            Ui(n, []).show_maze(self.entry, exit, (255, 255, 255))
-            sleep(0.5)
+        for m, s in algorithm.generate_maze(self.maze, self.entry, self.exit):
+            if animation:
+                os.system('clear')
+                Ui(m, []).show_maze(self.entry, self.exit,
+                                    (255, 255, 255), step=s)
+                sleep(0.2)
+        else:
+            for m in algorithm.generate_maze(self.maze, self.entry, self.exit):
+                pass
         if not self.perfect:
             self.maze.reset_visited()
             try:
                 self.do_ft()
             except FtError:
                 pass
-            algorithm.generate_maze(self.maze, self.entry, self.exit)
+            for m, s in algorithm.generate_maze(self.maze, self.entry,
+                                                self.exit):
+                if animation:
+                    os.system('clear')
+                    Ui(m, []).show_maze(self.entry, self.exit,
+                                        (255, 255, 255), step=s)
+                    sleep(0.3)
         return message
 
     def do_ft(self) -> None:

@@ -78,7 +78,8 @@ class Maze():
                                (x - 1, y), (x + 1, y)]
         neighbors = [(nx, ny) for nx, ny in candidate_neighbors
                      if 0 <= ny < limit_y and 0 <= nx < limit_x
-                     and not self.maze[ny][nx]._visited]
+                     and not self.maze[ny][nx]._visited
+                     and self.maze[ny][nx].valid_cell()]
         return neighbors
 
     def get_neighbors(self, x: int, y: int,

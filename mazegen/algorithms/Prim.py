@@ -6,6 +6,7 @@ generate perfect mazes by randomly selecting frontier edges and removing
 walls between cells.
 """
 from mazegen.maze import Maze
+from typing import Generator
 import random
 
 
@@ -34,7 +35,8 @@ class Prim():
         self.seed = random.Random(seed)
 
     def generate_maze(self, maze: Maze,
-                      entry: tuple[int, int], exit: tuple[int, int]) -> None:
+                      entry: tuple[int, int],
+                      exit: tuple[int, int]) -> Generator:
         """
         Carve passages through the maze using randomized Prim's algorithm.
 
@@ -64,4 +66,4 @@ class Prim():
                     maze.direction(chosen1, chosen2))
                 maze.maze[chosen2[1]][chosen2[0]].break_wall(
                     maze.direction(chosen2, chosen1))
-            yield maze
+                yield maze, chosen2

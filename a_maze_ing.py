@@ -21,12 +21,14 @@ from parser import load_and_parse_config
 from mazegen import MazeGenerator, Astar
 from mazegen.algorithms import Dfs, Prim
 from Ui import Ui
+from time import sleep
 import os
 
 
 if __name__ == "__main__":
     try:
-        show = False
+        show = True
+        animation = False
         choice = 1
         rgb_list = [(255, 255, 255), (240, 224, 0)]
         rgb_index = 0
@@ -44,10 +46,29 @@ if __name__ == "__main__":
             if choice == 1:
                 config = load_and_parse_config()
                 generator = MazeGenerator(**config, algorithm=algorithm)
-                message = generator.generate_maze()
+                message = generator.generate_maze(animation)
+                try:
+                    os.remove(generator.output_file)
+                except FileNotFoundError:
+                    pass
                 generator.save_maze()
                 path = Astar().algorithm(generator.maze,
                                          config['entry'], config['exit'])
+                nodes = []
+                while True:
+                    try:
+                        os.system('clear')
+                        nodes.append(next(path))
+                        if animation:
+                            Ui(generator.maze,
+                               []).show_maze(config['entry'],
+                                             config['exit'],
+                                             rgb_list[0], True, nodes)
+                            sleep(0.3)
+                    except StopIteration as error:
+                        nodes = None
+                        path = error.value
+                        break
 
                 with open(config['output_file'], 'a') as output_file:
                     output_file.write(Astar.make_cardinal_path(
@@ -104,11 +125,17 @@ remove the default colors')
                 except ValueError as e:
                     message = e.args[0]
 
+            elif choice == 7:
+                if not animation:
+                    animation = True
+                else:
+                    animation = False
+
             os.system('clear')
             ui.show_maze(config['entry'], config['exit'], rgb, show)
             if message is not None:
                 print(message)
-            ui.menu(show, algorithm.__name__)
+            ui.menu(show, algorithm.__name__, animation)
             choice = ui.input_validate()
     except ValueError as e:
         print(e)

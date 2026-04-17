@@ -7,6 +7,7 @@ coordinates representing the shortest path from entry to exit.
 """
 from ..maze.Maze import Maze
 from ..Errors import AstarError
+from typing import Generator
 
 
 class Astar():
@@ -32,7 +33,8 @@ class Astar():
         result = abs(pos[0] - goal[0]) + abs(pos[1] - goal[1])
         return result
 
-    def algorithm(self, maze: Maze, entry: tuple, exit: tuple) -> list[tuple]:
+    def algorithm(self, maze: Maze,
+                  entry: tuple, exit: tuple) -> list[tuple] | Generator:
         """
         Run the A* search on the given maze.
 
@@ -80,6 +82,8 @@ class Astar():
 
             if current_node == exit:
                 return self.make_path(came_from, entry, exit)
+
+            yield current_node
 
         raise AstarError("Error: path not exist")
 

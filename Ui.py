@@ -37,7 +37,7 @@ class Ui():
         self.maze = maze
         self.path = path
 
-    def menu(self, show: bool, algorithm: str) -> None:
+    def menu(self, show: bool, algorithm: str, animation: bool) -> None:
         """
         Print the interactive menu to stdout.
 
@@ -52,8 +52,9 @@ class Ui():
         print("4. Rotate maze colors")
         print("5. Add an RGB color to the color list")
         print("6. Remove the last RGB color from the color list")
+        print(f"7. Animation ({animation})")
         print("0. Quit")
-        print('\nChoice (0-6):', end=' ')
+        print('\nChoice (0-7):', end=' ')
 
     def input_validate(self) -> int:
         """
@@ -72,7 +73,8 @@ class Ui():
                 print('Please insert a number:', end=' ')
 
     def show_maze(self, entry: tuple, exit: tuple,
-                  rgb: tuple, path: bool = False) -> None:
+                  rgb: tuple, path: bool = False,
+                  step: tuple[int, int] | None = None) -> None:
         """
         Print the maze to stdout, optionally showing the solution path.
 
@@ -83,17 +85,21 @@ class Ui():
             path (bool): If True, overlay the solution path.
         """
         if path:
-            for line in self.render_path(entry, exit, rgb):
+            map = ''
+            for line in self.render_path(entry, exit, rgb,
+                                         step if step else []):
                 for _ in line:
-                    print(_, end='')
-                print()
+                    map += _
+                map += '\n'
+            print(map)
         else:
-            for line in self.render(entry, exit, rgb):
+            for line in self.render(entry, exit, rgb, step):
                 for _ in line:
                     print(_, end='')
                 print()
 
-    def render(self, entry: tuple, exit: tuple, rgb: tuple) -> list[list[str]]:
+    def render(self, entry: tuple, exit: tuple, rgb: tuple,
+               step: tuple[int, int] | None = None) -> list[list[str]]:
         """
         Build a rendered representation of the maze without the solution path.
 
@@ -137,6 +143,10 @@ class Ui():
                     if maze.maze[y][x].close_block():
                         line2.append(f'\033[38;2;{set_color}m█\033[0m\
 \033[48;2;100;100;100m    \033[0m')
+                    elif (x, y) == step:
+                        line2.append(f'\033[38;2;{set_color}m█{reset_color}\
+\033[48;2;255;255;0m    {reset_color}')
+
                     elif (x, y) == entry:
                         line2.append(f'\033[38;2;{set_color}m█{reset_color}\
 \033[48;2;0;0;255m    {reset_color}')
@@ -146,7 +156,9 @@ class Ui():
                     else:
                         line2.append(f'\033[38;2;{set_color}m█\033[0m    ')
                 else:
-                    if (x, y) == entry:
+                    if (x, y) == step:
+                        line2.append(f' \033[48;2;255;255;0m    {reset_color}')
+                    elif (x, y) == entry:
                         line2.append(f' \033[48;2;0;0;255m    {reset_color}')
                     elif (x, y) == exit:
                         line2.append(f' \033[48;2;255;0;0m    {reset_color}')
@@ -162,7 +174,8 @@ class Ui():
         return render_maze
 
     def render_path(self, entry: tuple, exit: tuple,
-                    rgb: tuple) -> list[list[str]]:
+                    rgb: tuple,
+                    step: list[tuple]) -> list[list[str]]:
         """
         Build a rendered representation of the maze with the solution path.
 
@@ -210,6 +223,9 @@ class Ui():
                     elif (x, y) == exit:
                         line2.append(f'\033[38;2;{set_color}m█{reset_color}\
 \033[48;2;255;0;0m    {reset_color}')
+                    elif (x, y) in step:
+                        line2.append(f'\033[38;2;{set_color}m█{reset_color}\
+\033[48;2;0;180;0m    {reset_color}')
                     elif (x, y) in path:
                         line2.append(f'\033[38;2;{set_color}m█{reset_color}\
 {path_color}    {reset_color}')
@@ -222,6 +238,8 @@ class Ui():
                         line2.append(f' \033[48;2;0;0;255m    {reset_color}')
                     elif (x, y) == exit:
                         line2.append(f' \033[48;2;255;0;0m    {reset_color}')
+                    elif (x, y) in step:
+                        line2.append(f' \033[48;2;0;180;0m    {reset_color}')
                     elif (x, y) in path:
                         line2.append(f' {path_color}    {reset_color}')
                     else:

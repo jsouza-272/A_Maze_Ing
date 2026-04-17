@@ -5,6 +5,7 @@ This module implements the iterative DFS-based maze carving algorithm used to
 generate perfect or imperfect mazes by randomly removing walls between cells.
 """
 from mazegen.maze import Maze
+from typing import Generator
 import random
 
 
@@ -31,7 +32,8 @@ class Dfs():
         self.seed = random.Random(seed)
 
     def generate_maze(self, maze: Maze,
-                      entry: tuple[int, int], exit: tuple[int, int]) -> None:
+                      entry: tuple[int, int],
+                      exit: tuple[int, int]) -> Generator:
         """
         Carve passages through the maze using iterative DFS.
 
@@ -47,6 +49,8 @@ class Dfs():
         """
         stack: list = [entry]
         candidates = maze.unvisited_neighbors(*stack[-1])
+        last = None
+        nx, ny = None, None
         while stack:
             cx, cy = stack[-1]
             maze.maze[cy][cx].visited()
@@ -60,4 +64,8 @@ class Dfs():
                 maze.maze[ny][nx].break_wall(maze.direction(
                     (nx, ny), (cx, cy)))
                 stack.append((nx, ny))
-            yield maze
+            if last != (nx, ny):
+                yield maze, (nx, ny)
+                last = (nx, ny)
+            else:
+                yield maze, (cx, cy)
