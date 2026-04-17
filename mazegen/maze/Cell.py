@@ -90,5 +90,16 @@ class Cell():
         return True
 
     def valid_cell(self) -> int:
+        """
+        Check whether this cell is a valid carving target.
+
+        A cell is considered valid when more than one of its walls is still
+        intact, meaning it has not yet been fully carved into a dead-end
+        during generation.
+
+        Returns:
+            int: 1 (truthy) if more than one wall is present, 0 (falsy)
+                otherwise.
+        """
         walls = list(self._walls.values())
         return walls.count(1) > 1
