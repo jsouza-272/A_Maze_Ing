@@ -8,6 +8,7 @@ This module provides a simple text-based interface that:
 - optionally overlays the solution path from entry to exit
 """
 from mazegen.maze.Maze import Maze
+from typing import Any
 
 
 class Ui():
@@ -74,7 +75,7 @@ class Ui():
 
     def show_maze(self, entry: tuple, exit: tuple,
                   rgb: tuple, path: bool = False,
-                  step: tuple[int, int] | None = None) -> None:
+                  step: Any | None = None) -> None:
         """
         Print the maze to stdout, optionally showing the solution path.
 
@@ -175,7 +176,7 @@ class Ui():
 
     def render_path(self, entry: tuple, exit: tuple,
                     rgb: tuple,
-                    step: list[tuple]) -> list[list[str]]:
+                    step: list[tuple | Any]) -> list[list[str]]:
         """
         Build a rendered representation of the maze with the solution path.
 

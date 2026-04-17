@@ -66,7 +66,7 @@ if __name__ == "__main__":
                                              rgb_list[0], True, nodes)
                             sleep(0.3)
                     except StopIteration as error:
-                        nodes = None
+                        nodes.clear()
                         path = error.value
                         break
 

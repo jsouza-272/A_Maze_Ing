@@ -7,7 +7,7 @@ coordinates representing the shortest path from entry to exit.
 """
 from ..maze.Maze import Maze
 from ..Errors import AstarError
-from typing import Generator
+from typing import Any
 
 
 class Astar():
@@ -34,7 +34,7 @@ class Astar():
         return result
 
     def algorithm(self, maze: Maze,
-                  entry: tuple, exit: tuple) -> list[tuple] | Generator:
+                  entry: tuple, exit: tuple) -> Any:
         """
         Run the A* search on the given maze.
 
