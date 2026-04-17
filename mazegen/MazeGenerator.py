@@ -143,9 +143,9 @@ class MazeGenerator():
         for h in range(0, bitmap_h):
             for w in range(0, bitmap_w):
                 if self.exit == (sx + w, sy + h) and bitmap[h][w] == '#':
-                    raise FtError('Error: exit point in "42" patern')
+                    raise FtError('Error: exit point in "42" pattern')
                 if self.entry == (w + sx, h + sy) and bitmap[h][w] == '#':
-                    raise FtError('Error: entry point in "42" patern')
+                    raise FtError('Error: entry point in "42" pattern')
                 if bitmap[h][w] == '#':
                     self.maze.maze[sy + h][sx + w].visited()
 

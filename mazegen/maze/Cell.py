@@ -89,7 +89,7 @@ class Cell():
             return False
         return True
 
-    def valid_cell(self) -> int:
+    def valid_cell(self) -> bool:
         """
         Check whether this cell is a valid carving target.
 
@@ -98,8 +98,7 @@ class Cell():
         during generation.
 
         Returns:
-            int: 1 (truthy) if more than one wall is present, 0 (falsy)
-                otherwise.
+            bool: True if more than one wall is present, False otherwise.
         """
         walls = list(self._walls.values())
         return walls.count(1) > 1

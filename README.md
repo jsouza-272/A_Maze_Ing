@@ -158,7 +158,7 @@ The maze generation logic is encapsulated in the `MazeGenerator` class inside th
 From the root of the repository:
 
 ```bash
-pip install dist/mazegen-0.1.2-py3-none-any.whl
+pip install dist/mazegen-0.1.3-py3-none-any.whl
 ```
 
 ### Basic usage
