@@ -158,7 +158,7 @@ The maze generation logic is encapsulated in the `MazeGenerator` class inside th
 From the root of the repository:
 
 ```bash
-pip install dist/mazegen-0.1.0-py3-none-any.whl
+pip install dist/mazegen-0.1.2-py3-none-any.whl
 ```
 
 ### Basic usage
@@ -167,7 +167,7 @@ pip install dist/mazegen-0.1.0-py3-none-any.whl
 from mazegen import MazeGenerator, Astar
 from mazegen.algorithms import Dfs, Prim
 
-# Instantiate the generator (DFS algorithm by default)
+# Instantiate the generator (Prim's algorithm by default)
 gen = MazeGenerator(
     width=20,
     height=15,
@@ -176,7 +176,7 @@ gen = MazeGenerator(
     output_file="maze.txt",
     perfect=True,
     seed=42,          # optional: omit for a random maze
-    algorithm=Dfs     # optional: use Prim for Prim's algorithm
+    algorithm=Dfs     # optional: use Dfs instead of the default Prim
 )
 
 # Generate and save the maze
@@ -190,9 +190,14 @@ hex_maze: str = gen.get_maze()
 maze_grid = gen.maze          # gen.maze is a Maze instance
                                # maze_grid.maze[y][x] is a Cell
 
-# Solve the maze
-path = Astar().algorithm(gen.maze, (0, 0), (19, 14))
-# path is a list of (x, y) tuples representing the solution
+# Solve the maze (algorithm() is a generator; consume it to get the path)
+gen_path = Astar().algorithm(gen.maze, (0, 0), (19, 14))
+path = []
+try:
+    while True:
+        next(gen_path)
+except StopIteration as e:
+    path = e.value  # list of (x, y) tuples representing the solution
 
 # Get the cardinal-direction string (N/E/S/W)
 cardinal = Astar.make_cardinal_path(path.copy(), (19, 14))
@@ -210,13 +215,13 @@ print(cardinal)  # e.g. "EESSENN..."
 | `output_file`| `str`            | —       | Output file path                         |
 | `perfect`    | `bool`           | —       | `True` for a perfect maze, `False` for loops |
 | `seed`       | `int | None`     | `None`  | RNG seed for reproducibility             |
-| `algorithm`  | `Dfs | Prim`     | `Dfs`   | Generation algorithm class               |
+| `algorithm`  | `Dfs | Prim`     | `Prim`  | Generation algorithm class               |
 
 ### Accessing the maze structure and solution
 
-- `gen.maze` — a `Maze` instance; `gen.maze.maze[y][x]` returns a `Cell` with `._walls` dict (`'N'`, `'E'`, `'S'`, `'W'` → `bool`).
+- `gen.maze` — a `Maze` instance; `gen.maze.maze[y][x]` returns a `Cell` with `._walls` dict (`'N'`, `'E'`, `'S'`, `'W'` → `int`, where `1` = wall present, `0` = open passage).
 - `gen.get_maze()` — returns the full hex string of the maze (same format as the output file).
-- `Astar().algorithm(maze, entry, exit)` — returns a `list[tuple[int,int]]` of cell coordinates on the shortest path.
+- `Astar().algorithm(maze, entry, exit)` — a generator that yields visited coordinates as it searches; when exhausted, the return value (available via `StopIteration.value`) is a `list[tuple[int,int]]` of cell coordinates on the shortest path.
 - `Astar.make_cardinal_path(path, exit)` — converts the coordinate list to a `str` of `N`/`E`/`S`/`W` characters.
 
 ### Building the package
@@ -231,7 +236,7 @@ python -m build
 # Produces dist/mazegen-*.whl and dist/mazegen-*.tar.gz
 ```
 
-The pre-built artifacts (`mazegen-0.1.0-py3-none-any.whl` and `mazegen-0.1.0.tar.gz`) are available in the `dist/` directory at the root of the repository.
+The pre-built artifacts (`mazegen-0.1.2-py3-none-any.whl` and `mazegen-0.1.2.tar.gz`) are available in the `dist/` directory at the root of the repository.
 
 ---
 
@@ -251,9 +256,10 @@ After the maze is generated, an interactive menu is shown in the terminal:
 4. Rotate maze colors
 5. Add an RGB color to the color list
 6. Remove the last RGB color from the color list
+7. Animation (False)
 0. Quit
 
-Choice (0-6):
+Choice (0-7):
 ```
 
 | Key / Input | Action                                                   |
@@ -264,6 +270,7 @@ Choice (0-6):
 | `4`         | Cycle maze wall color through the current color list     |
 | `5`         | Add a custom RGB color to the wall color list            |
 | `6`         | Remove the last custom RGB color from the color list     |
+| `7`         | Toggle step-by-step animation during maze generation     |
 | `0`         | Quit the program                                         |
 
 ### Color coding

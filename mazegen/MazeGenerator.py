@@ -32,6 +32,8 @@ class MazeGenerator():
         output_file (str): File path where the maze will be saved.
         perfect (bool): If True, generates a perfect maze (single solution).
         seed (int | None): Optional RNG seed for deterministic generation.
+        algorithm (Type[Dfs] | Type[Prim]): Generation algorithm class to use.
+            Defaults to ``Prim``.
     """
 
     def __init__(self, width: int, height: int, entry: tuple[int, int],
@@ -53,17 +55,30 @@ class MazeGenerator():
 
     def generate_maze(self, animation: bool = False) -> None | str:
         """
-        Generate the maze using DFS-based carving.
+        Generate the maze by running the configured carving algorithm.
 
         This method optionally applies the "42" pattern (if the maze is large
-        enough) and then runs the DFS algorithm to carve passages.
+        enough) and then runs the selected algorithm (DFS or Prim) to carve
+        passages. When ``animation`` is True, the maze is rendered to the
+        terminal after each carving step with a short delay.
 
         If ``perfect`` is False, it performs an additional pass to create an
-        imperfect maze by resetting visited flags and re-running generation.
+        imperfect maze by resetting visited flags and re-running the algorithm,
+        adding extra passages (loops) while maintaining full connectivity.
+
+        Args:
+            animation (bool): If True, render the maze step-by-step in the
+                terminal during generation. Defaults to False.
+
+        Returns:
+            str | None: An informational message if the "42" pattern could not
+                be placed (maze too small or entry/exit overlap), otherwise
+                None.
 
         Raises:
             FtError: If the maze is too small to place the "42" pattern
-                (the error is caught and printed; generation continues).
+                (the error is caught internally; generation continues without
+                the pattern).
         """
         message = None
         try:

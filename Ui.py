@@ -45,6 +45,7 @@ class Ui():
         Args:
             show (bool): Whether the path overlay is currently enabled.
             algorithm (str): Name of the currently active generation algorithm.
+            animation (bool): Whether step-by-step animation mode is enabled.
         """
         print("\n=== A-Maze-Ing ===")
         print("1. Re-generate a new maze")
@@ -84,6 +85,9 @@ class Ui():
             exit (tuple[int, int]): Exit coordinate (x, y).
             rgb (tuple[int, int, int]): Maze wall color as (r, g, b).
             path (bool): If True, overlay the solution path.
+            step (tuple[int, int] | list | None): A single coordinate to
+                highlight as the current animation step, or a list of
+                coordinates for the path animation overlay. Defaults to None.
         """
         if path:
             map = ''
@@ -111,6 +115,8 @@ class Ui():
             entry (tuple[int, int]): Entry coordinate (x, y).
             exit (tuple[int, int]): Exit coordinate (x, y).
             rgb (tuple[int, int, int]): Maze wall color as (r, g, b).
+            step (tuple[int, int] | None): Optional coordinate of the cell
+                to highlight as the current animation step.
 
         Returns:
             list[list[str]]: Lines and segments to be printed to display the
@@ -184,6 +190,9 @@ class Ui():
             entry (tuple[int, int]): Entry coordinate (x, y).
             exit (tuple[int, int]): Exit coordinate (x, y).
             rgb (tuple[int, int, int]): Maze wall color as (r, g, b).
+            step (list[tuple[int, int]]): List of coordinates to highlight as
+                the current animated path progress. Pass an empty list when no
+                step-by-step animation is active.
 
         Returns:
             list[list[str]]: Lines and segments to be printed with a path

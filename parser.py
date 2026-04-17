@@ -299,18 +299,16 @@ def load_and_parse_config() -> dict:
     """
     Load, parse, and validate the configuration file.
 
-    This is the main helper function for the parser pipeline. It combines
-    file reading, raw parsing, and full validation into one call.
-
-    Args:
-        cfg_path (str): Path to the configuration file.
+    This is the main helper function for the parser pipeline. It reads the
+    config file path from ``sys.argv``, then combines file reading, raw
+    parsing, and full validation into one call.
 
     Returns:
         dict[str, object]: Final validated configuration dictionary.
 
     Raises:
         ValueError: If the file contents are invalid.
-        SystemExit: If the file cannot be opened.
+        SystemExit: If the file cannot be opened or CLI arguments are wrong.
     """
     cfg_path = validate_args()
     lines = load_config_file(cfg_path)
