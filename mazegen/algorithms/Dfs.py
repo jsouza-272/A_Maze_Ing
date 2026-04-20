@@ -47,6 +47,10 @@ class Dfs():
             entry (tuple[int, int]): Starting coordinate (x, y).
             exit (tuple[int, int]): Target coordinate that halts the current
                 branch when reached.
+            first (bool): If True, carves walls unconditionally (first pass,
+                perfect maze). If False, only carves walls between cells that
+                still have multiple walls intact (second pass, adds extra
+                passages for imperfect mazes). Defaults to True.
         """
         stack: list = [entry]
         candidates = maze.unvisited_neighbors(*stack[-1])

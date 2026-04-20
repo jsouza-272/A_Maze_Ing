@@ -122,7 +122,7 @@ EESSEENN...
 
 Two algorithms are available, selectable interactively via the terminal menu:
 
-### Depth-First Search (DFS) — default
+### Depth-First Search (DFS)
 
 The DFS recursive backtracker algorithm is implemented in `mazegen/algorithms/Dfs.py`.
 
@@ -133,7 +133,7 @@ The DFS recursive backtracker algorithm is implemented in `mazegen/algorithms/Df
 - Creates mazes with long, winding corridors — visually interesting and easy to verify.
 - To generate an **imperfect maze** (when `PERFECT=False`), the DFS pass is run a second time on partially visited cells to add extra passages (loops), while still maintaining full connectivity.
 
-### Randomized Prim's algorithm
+### Randomized Prim's algorithm — default
 
 The randomized Prim's algorithm is implemented in `mazegen/algorithms/Prim.py`.
 
@@ -158,7 +158,7 @@ The maze generation logic is encapsulated in the `MazeGenerator` class inside th
 From the root of the repository:
 
 ```bash
-pip install dist/mazegen-0.1.3-py3-none-any.whl
+pip install dist/mazegen-0.1.5-py3-none-any.whl
 ```
 
 ### Basic usage
@@ -236,7 +236,7 @@ python -m build
 # Produces dist/mazegen-*.whl and dist/mazegen-*.tar.gz
 ```
 
-The pre-built artifacts (`mazegen-0.1.2-py3-none-any.whl` and `mazegen-0.1.2.tar.gz`) are available in the `dist/` directory at the root of the repository.
+The pre-built artifacts (`mazegen-0.1.5-py3-none-any.whl` and `mazegen-0.1.5.tar.gz`) are available in the `dist/` directory at the root of the repository.
 
 ---
 
@@ -252,7 +252,7 @@ After the maze is generated, an interactive menu is shown in the terminal:
 === A-Maze-Ing ===
 1. Re-generate a new maze
 2. Show path from entry to exit (False)
-3. Change algorithm (current: Dfs)
+3. Change algorithm (current: Prim)
 4. Rotate maze colors
 5. Add an RGB color to the color list
 6. Remove the last RGB color from the color list

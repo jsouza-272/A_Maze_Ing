@@ -52,6 +52,10 @@ class Prim():
             entry (tuple[int, int]): Starting coordinate (x, y).
             exit (tuple[int, int]): Target coordinate (unused directly, kept
                 for interface compatibility with other algorithm classes).
+            first (bool): If True, carves walls unconditionally (first pass,
+                perfect maze). If False, only carves walls between cells that
+                are still valid carving targets (second pass, adds extra
+                passages for imperfect mazes). Defaults to True.
         """
         maze.maze[entry[1]][entry[0]].visited()
         frontiers = [(entry, neighbor)
