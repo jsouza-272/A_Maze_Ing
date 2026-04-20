@@ -101,4 +101,4 @@ class Cell():
             bool: True if more than one wall is present, False otherwise.
         """
         walls = list(self._walls.values())
-        return walls.count(1) > 1
+        return walls.count(1) >= 2

@@ -36,7 +36,8 @@ class Prim():
 
     def generate_maze(self, maze: Maze,
                       entry: tuple[int, int],
-                      exit: tuple[int, int]) -> Generator:
+                      exit: tuple[int, int],
+                      first: bool = True) -> Generator:
         """
         Carve passages through the maze using randomized Prim's algorithm.
 
@@ -57,13 +58,23 @@ class Prim():
                      for neighbor in maze.unvisited_neighbors(*entry)]
         while frontiers:
             chosen1, chosen2 = self.seed.choice(frontiers)
+            x1, y1 = chosen1
+            x2, y2 = chosen2
             frontiers.remove((chosen1, chosen2))
-            if not maze.maze[chosen2[1]][chosen2[0]]._visited:
-                maze.maze[chosen2[1]][chosen2[0]].visited()
+            if not maze.maze[y2][x2]._visited:
+                maze.maze[y2][x2].visited()
                 frontiers.extend([(chosen2, neighbor) for neighbor in maze.
                                   unvisited_neighbors(*chosen2)])
-                maze.maze[chosen1[1]][chosen1[0]].break_wall(
-                    maze.direction(chosen1, chosen2))
-                maze.maze[chosen2[1]][chosen2[0]].break_wall(
-                    maze.direction(chosen2, chosen1))
+                if first:
+                    maze.maze[y1][x1].break_wall(
+                        maze.direction(chosen1, chosen2))
+                    maze.maze[y2][x2].break_wall(
+                        maze.direction(chosen2, chosen1))
+                else:
+                    if (maze.maze[y2][x2].valid_cell()
+                            and maze.maze[y1][x1].valid_cell()):
+                        maze.maze[y1][x1].break_wall(
+                            maze.direction(chosen1, chosen2))
+                        maze.maze[y2][x2].break_wall(
+                            maze.direction(chosen2, chosen1))
                 yield maze, chosen2

@@ -33,7 +33,7 @@ if __name__ == "__main__":
         rgb_list = [(255, 255, 255), (240, 224, 0)]
         rgb_index = 0
         rgb = rgb_list[rgb_index]
-        algorithm: type[Dfs] | type[Prim] = Dfs
+        algorithm: type[Dfs] | type[Prim] = Prim
         while choice != 0:
             message = None
             if choice == 3:
@@ -64,7 +64,7 @@ if __name__ == "__main__":
                                []).show_maze(config['entry'],
                                              config['exit'],
                                              rgb_list[0], True, nodes)
-                            sleep(0.3)
+                            sleep(0.07)
                     except StopIteration as error:
                         nodes.clear()
                         path = error.value

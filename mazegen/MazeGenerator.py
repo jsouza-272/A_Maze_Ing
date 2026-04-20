@@ -92,10 +92,7 @@ class MazeGenerator():
                 os.system('clear')
                 Ui(m, []).show_maze(self.entry, self.exit,
                                     (255, 255, 255), step=s)
-                sleep(0.2)
-        else:
-            for m in algorithm.generate_maze(self.maze, self.entry, self.exit):
-                pass
+                sleep(0.07)
         if not self.perfect:
             self.maze.reset_visited()
             try:
@@ -103,12 +100,12 @@ class MazeGenerator():
             except FtError:
                 pass
             for m, s in algorithm.generate_maze(self.maze, self.entry,
-                                                self.exit):
+                                                self.exit, False):
                 if animation:
                     os.system('clear')
                     Ui(m, []).show_maze(self.entry, self.exit,
                                         (255, 255, 255), step=s)
-                    sleep(0.3)
+                    sleep(0.07)
         return message
 
     def do_ft(self) -> None:

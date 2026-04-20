@@ -33,7 +33,8 @@ class Dfs():
 
     def generate_maze(self, maze: Maze,
                       entry: tuple[int, int],
-                      exit: tuple[int, int]) -> Generator:
+                      exit: tuple[int, int],
+                      first: bool = True) -> Generator:
         """
         Carve passages through the maze using iterative DFS.
 
@@ -59,10 +60,18 @@ class Dfs():
                 stack.pop()
             else:
                 nx, ny = self.seed.choice(candidates)
-                maze.maze[cy][cx].break_wall(maze.direction(
-                    (cx, cy), (nx, ny)))
-                maze.maze[ny][nx].break_wall(maze.direction(
-                    (nx, ny), (cx, cy)))
+                print((cx, cy), (nx, ny), candidates)
+                if first:
+                    maze.maze[cy][cx].break_wall(maze.direction(
+                        (cx, cy), (nx, ny)))
+                    maze.maze[ny][nx].break_wall(maze.direction(
+                        (nx, ny), (cx, cy)))
+                else:
+                    if maze.maze[cy][cx].valid_cell():
+                        maze.maze[cy][cx].break_wall(maze.direction(
+                            (cx, cy), (nx, ny)))
+                        maze.maze[ny][nx].break_wall(maze.direction(
+                            (nx, ny), (cx, cy)))
                 stack.append((nx, ny))
             if last != (nx, ny):
                 yield maze, (nx, ny)
