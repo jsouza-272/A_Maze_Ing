@@ -103,6 +103,8 @@ def parse_config_lines(lines: list) -> dict:
 
         if not line or line.startswith('#'):
             continue
+        elif line and '#' in line:
+            line = line.split('#')[0]
 
         parts: list = line.split('=')
         if len(parts) != 2:
