@@ -4,7 +4,8 @@ Maze generation pipeline.
 This module defines the MazeGenerator class, which coordinates:
 - maze structure creation
 - optional placement of a "42" pattern obstacle (when the maze is large enough)
-- generation of a perfect or imperfect maze using DFS-based carving
+- generation of a perfect or imperfect maze using a configurable algorithm
+  (DFS backtracker or randomized Prim's)
 - serialization of the maze and entry/exit positions to an output file
 """
 from .maze import Maze

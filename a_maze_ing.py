@@ -8,8 +8,8 @@ This script orchestrates the whole maze generation and solving pipeline:
 - writes the resulting cardinal path to the configured output file
 - renders an interactive terminal UI for visualization
 
-The generation algorithm can be toggled interactively between DFS and Prim
-using menu option 3.
+The default generation algorithm is Prim's. It can be toggled interactively
+between Prim and DFS using menu option 3.
 
 Run:
     python3 a_maze_ing.py config.txt
